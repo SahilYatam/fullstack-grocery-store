@@ -14,16 +14,13 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/useCart";
 
 const Navbar = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user: any = {name: "John Wick", email: "johnwich@exampl.com", isAdmin: true}
 
-  const { cartCount, setIsCartOpen } = {
-    cartCount: 5,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-    setIsCartOpen: (_data: any) => {},
-  };
+  const { cartCount, setIsCartOpen } = useCart()
 
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
