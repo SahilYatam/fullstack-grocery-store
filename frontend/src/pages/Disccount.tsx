@@ -1,7 +1,10 @@
+import DisccountDeals from "../components/DisccountDeals";
 
 const Disccount = () => {
   return (
-    <div>Disccount</div>
+    <div>
+        <DisccountDeals/>
+    </div>
   )
 }
 
