@@ -20,6 +20,7 @@ const ProductPage = () => {
   const [localQuantity, setLocalQuantity] = useState(1);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setLocalQuantity(1);
     window.scrollTo(0, 0);
