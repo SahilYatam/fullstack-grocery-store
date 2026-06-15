@@ -1,5 +1,6 @@
 import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../config/prisma";
+import { inngest } from "../inngest";
 import { ApiError } from "../shared/responses/ApiError";
 
 type OrderItemInput = {
@@ -103,6 +104,7 @@ const createOrder = async (
             },
         });
 
+        // Decrease stock
         for (const item of orderItems) {
             await tx.product.update({
                 where: { id: item.product },
@@ -111,7 +113,21 @@ const createOrder = async (
                 },
             });
         }
+
         return createOrder;
+    });
+
+    // Send stock update events for each product in the order
+    for (const item of orderItems) {
+        await inngest.send({
+            name: "inventory/stock.updated",
+            data: { productId: item.product },
+        });
+    }
+
+    await inngest.send({
+        name: "order/placed",
+        data: { orderId: order.id },
     });
 
     // Stripe payment link logic later
@@ -178,34 +194,34 @@ const updateOrderStatus = async (id: string, status: string, note: string) => {
     return updatedOrder;
 };
 
-const getAllOrders = async() => {
+const getAllOrders = async () => {
     const orders = await prisma.order.findMany({
-        where: {NOT: [{paymentMethod: "card", isPaid: false}]},
+        where: { NOT: [{ paymentMethod: "card", isPaid: false }] },
         include: {
-            user: {select: {name: true, email: true}},
+            user: { select: { name: true, email: true } },
             deliveryPartner: {
-                select: { name: true, phone: true, email: true},
+                select: { name: true, phone: true, email: true },
             },
         },
-        orderBy: {createdAt: "desc"}
-    })
+        orderBy: { createdAt: "desc" },
+    });
 
-    return orders
-}
+    return orders;
+};
 
-const getOrderLocation = async(id: string, userId: string) => {
+const getOrderLocation = async (id: string, userId: string) => {
     const order = await prisma.order.findFirst({
-        where: {id, userId},
-        select: {liveLocation: true, status: true}
-    })
+        where: { id, userId },
+        select: { liveLocation: true, status: true },
+    });
 
     if (!order) throw new ApiError(404, "Order not found");
 
     return {
         liveLocation: order.liveLocation,
-        status: order.status
-    }
-}
+        status: order.status,
+    };
+};
 
 export const orderService = {
     createOrder,
@@ -213,5 +229,5 @@ export const orderService = {
     getOrder,
     updateOrderStatus,
     getAllOrders,
-    getOrderLocation
+    getOrderLocation,
 };
