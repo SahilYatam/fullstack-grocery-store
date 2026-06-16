@@ -1,6 +1,7 @@
 import { prisma } from "../config/prisma";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { ApiError } from "../shared/responses/ApiError";
 
 const generateToken = (id: string) => {
     return jwt.sign({id}, process.env.JWT_SECRET as string, {
@@ -25,14 +26,14 @@ interface User {
 
 const register = async (user: User) => {
     if (!user.name || !user.email || !user.password) {
-        throw new Error("All fields are required");
+        throw new ApiError(401, "All fields are required")
     }
 
     const userExist = await prisma.user.findUnique({
         where: { email: user.email.toLowerCase() },
     });
     if (userExist) {
-        throw new Error("User already exists with this email!");
+        throw new ApiError(401, "User already exists with this email!")
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10)
@@ -57,7 +58,7 @@ const register = async (user: User) => {
 
 const login = async (email: string, password: string) => {
     if(!email || !password){
-        throw new Error("All fields are required");
+        throw new ApiError(401, "All fields are required")
     }
 
     const user = await prisma.user.findUnique({
@@ -66,11 +67,11 @@ const login = async (email: string, password: string) => {
         }
     })
 
-    if(!user) throw new Error("User not found!");
+    if(!user) throw new ApiError(404, "User not found");
 
     const isPassCorrect = bcrypt.compare(password, user.password)
 
-    if(!isPassCorrect) throw new Error("Password is incorrect");
+    if(!isPassCorrect) throw new ApiError(403, "Password is incorrect");
 
     const token = generateToken(user.id)
 
