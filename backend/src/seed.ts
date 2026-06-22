@@ -1,5 +1,5 @@
-import { Prisma } from "../generated/prisma/client";
-import { prisma } from "./config/prisma";
+import { Prisma } from "../generated/prisma/client.js";
+import { prisma } from "./config/prisma.js";
 
 const seedDB = async () => {
     try {
