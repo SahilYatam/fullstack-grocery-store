@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { productService } from "../services/product.service";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
-import { ApiResponse } from "../shared/responses/ApiResponse";
+import { productService } from "../services/product.service.js";
+import { asyncHandler } from "../shared/handlers/asyncHandler.js";
+import { ApiResponse } from "../shared/responses/ApiResponse.js";
 
 const getDiscountDeals = asyncHandler(async (req: Request, res: Response) => {
     const discountProducts = await productService.getDiscountDeals();
@@ -16,6 +16,15 @@ const getDiscountDeals = asyncHandler(async (req: Request, res: Response) => {
             ),
         );
 });
+
+const getAdminProducts = asyncHandler(async (req: Request, res: Response) => {
+    const products = await productService.getAdminProducts();
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, products, "Products fetched successfully"));
+});
+
 
 const getProducts = asyncHandler(async (req: Request, res: Response) => {
     const { category, search, minPrice, maxPrice, sort } = req.query;
@@ -99,21 +108,22 @@ const updateProduct = asyncHandler(
     }
 );
 
-const deleteProduct = asyncHandler(async (req: Request, res: Response) => {
-    await productService.deleteProduct(req.params.id as string);
+const deleteStockProduct = asyncHandler(async (req: Request, res: Response) => {
+    await productService.deleteStockProduct(req.params.id as string);
 
     return res.status(200).json(new ApiResponse(
         200,
         {},
-        "Product deleted"
+        "Product stock updated"
     ))
 });
 
 export const productController = {
     getDiscountDeals,
+    getAdminProducts,
     getProducts,
     getProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteStockProduct
 };

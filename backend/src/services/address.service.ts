@@ -1,6 +1,6 @@
-import { prisma } from "../config/prisma";
-import logger from "../shared/monitoring/logger";
-import { ApiError } from "../shared/responses/ApiError";
+import { prisma } from "../config/prisma.js";
+import logger from "../shared/monitoring/logger.js";
+import { ApiError } from "../shared/responses/ApiError.js";
 
 // Get user address
 const getAddresses = async (userId: string) => {

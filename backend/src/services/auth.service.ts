@@ -1,7 +1,7 @@
-import { prisma } from "../config/prisma";
+import { prisma } from "../config/prisma.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import { ApiError } from "../shared/responses/ApiError";
+import { ApiError } from "../shared/responses/ApiError.js";
 
 const generateToken = (id: string) => {
     return jwt.sign({id}, process.env.JWT_SECRET as string, {

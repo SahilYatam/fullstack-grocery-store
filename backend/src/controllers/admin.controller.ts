@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { adminService } from "../services/admin.service";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
-import { ApiResponse } from "../shared/responses/ApiResponse";
+import { adminService } from "../services/admin.service.js";
+import { asyncHandler } from "../shared/handlers/asyncHandler.js";
+import { ApiResponse } from "../shared/responses/ApiResponse.js";
 
 const getAdminStats = asyncHandler(async (req: Request, res: Response) => {
     const {
         totalOrders,
         totalUsers,
-        totalProduct,
+        totalProducts,
         outOfStock,
         totalPartners,
         recentOrders,
@@ -19,7 +19,7 @@ const getAdminStats = asyncHandler(async (req: Request, res: Response) => {
             {
                 totalOrders,
                 totalUsers,
-                totalProduct,
+                totalProducts,
                 outOfStock,
                 totalPartners,
                 recentOrders,

@@ -1,7 +1,8 @@
-import { Prisma } from "../../generated/prisma/client";
-import { prisma } from "../config/prisma";
-import { inngest } from "../inngest";
-import { ApiError } from "../shared/responses/ApiError";
+import { Prisma } from "../../generated/prisma/client.js";
+import { prisma } from "../config/prisma.js";
+import { inngest } from "../inngest/index.js";
+import { ApiError } from "../shared/responses/ApiError.js";
+import Stripe from "stripe";
 
 type OrderItemInput = {
     product: string;
@@ -13,6 +14,7 @@ const createOrder = async (
     addressId: string,
     paymentMethod: "card" | "cod",
     userId: string,
+    url: string,
 ) => {
     if (!items || items.length === 0) {
         throw new ApiError(400, "No order items");
@@ -130,9 +132,31 @@ const createOrder = async (
         data: { orderId: order.id },
     });
 
-    // Stripe payment link logic later
+    // Stripe payment link
     if (paymentMethod === "card") {
-        // TODO
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+
+        // Create session
+        const session = await stripe.checkout.sessions.create({
+            success_url: `${url}/orders?clearCart=true`,
+            cancel_url: `${url}/checkout`,
+
+            line_items: [
+                {
+                    price_data: {
+                        currency: "usd",
+                        product_data: {
+                            name: "Payment Groceries",
+                        },
+                        unit_amount: Math.round(total * 100),
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: "payment",
+            metadata: { orderId: order.id },
+        });
+        return { url: session.url };
     }
 
     return order;

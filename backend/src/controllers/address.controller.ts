@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { addressService } from "../services/address.service";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
-import { ApiResponse } from "../shared/responses/ApiResponse";
+import { addressService } from "../services/address.service.js";
+import { asyncHandler } from "../shared/handlers/asyncHandler.js";
+import { ApiResponse } from "../shared/responses/ApiResponse.js";
 
 const getAddresses = asyncHandler(async (req: Request, res: Response) => {
     const addresses = await addressService.getAddresses(req.user?.id as string);

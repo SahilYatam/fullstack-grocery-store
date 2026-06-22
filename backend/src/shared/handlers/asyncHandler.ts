@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import logger from "../monitoring/logger";
-import { ApiError } from "../responses/ApiError";
+import logger from "../monitoring/logger.js";
+import { ApiError } from "../responses/ApiError.js";
 
 export const asyncHandler = (fn: RequestHandler): RequestHandler => {
     return (req, res, next) => {

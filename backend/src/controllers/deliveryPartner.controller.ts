@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { deliveryPartnerService } from "../services/deliveryPartner.service";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
-import { ApiResponse } from "../shared/responses/ApiResponse";
+import { deliveryPartnerService } from "../services/deliveryPartner.service.js";
+import { asyncHandler } from "../shared/handlers/asyncHandler.js";
+import { ApiResponse } from "../shared/responses/ApiResponse.js";
 
 const loginPartner = asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -52,7 +52,7 @@ const completeDelivery = asyncHandler(async (req: Request, res: Response) => {
     const order = await deliveryPartnerService.completeDelivery(
         req.params.id as string,
         deliveryPartnerId as string,
-        otp as string
+        otp
     );
 
     return res

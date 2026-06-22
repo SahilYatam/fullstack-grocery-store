@@ -1,6 +1,5 @@
-import { prisma } from "../config/prisma";
-import logger from "../shared/monitoring/logger";
-import { ApiError } from "../shared/responses/ApiError";
+import { prisma } from "../config/prisma.js";
+import { ApiError } from "../shared/responses/ApiError.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -96,14 +95,22 @@ const completeDelivery = async (
     otp: string,
 ) => {
     const order = await prisma.order.findFirst({
-        where: { id, deliveryOtp: deliveryPartnerId },
+        where: {
+            id,
+            deliveryPartnerId,
+        },
     });
-    if (!order || order.status === "Cancelled" || order.status === "Delivered") {
+
+    if (!order) {
+        throw new ApiError(404, "Order not found");
+    }
+
+    if (order.status === "Cancelled" || order.status === "Delivered") {
         throw new ApiError(400, "Invalid Request");
     }
 
     if (order.deliveryOtp !== otp) {
-        throw new ApiError(500, "Invalid OTP");
+        throw new ApiError(400, "Invalid OTP");
     }
 
     const history = order.statusHistory as any[];
@@ -213,5 +220,5 @@ export const deliveryPartnerService = {
     completeDelivery,
     cancelDelivery,
     updateDeliveryStatus,
-    updateLiveLocation
+    updateLiveLocation,
 };

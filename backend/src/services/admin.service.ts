@@ -1,6 +1,6 @@
-import { prisma } from "../config/prisma";
-import logger from "../shared/monitoring/logger";
-import { ApiError } from "../shared/responses/ApiError";
+import { prisma } from "../config/prisma.js";
+import logger from "../shared/monitoring/logger.js";
+import { ApiError } from "../shared/responses/ApiError.js";
 import bcrypt from "bcrypt"
 
 // Get admin dashboard data
@@ -8,7 +8,7 @@ const getAdminStats = async () => {
     const [
         totalOrders,
         totalUsers,
-        totalProduct,
+        totalProducts,
         outOfStock,
         totalPartners,
         recentOrders,
@@ -51,7 +51,7 @@ const getAdminStats = async () => {
     return {
         totalOrders,
         totalUsers,
-        totalProduct,
+        totalProducts,
         outOfStock,
         totalPartners,
         recentOrders,
@@ -109,7 +109,7 @@ const updateDeliveryPartner = async(id: string, updateData: UpdateDeliveryPartne
     if(updateData.name) data.name = updateData.name;
     if(updateData.phone) data.phone = updateData.phone;
     if(updateData.vehicalType) data.vehicalType = updateData.vehicalType;
-    if(updateData.isActive) data.isActive = updateData.isActive;
+    data.isActive = updateData.isActive;
 
     try {
         const partner = await prisma.deliveryPartner.update({

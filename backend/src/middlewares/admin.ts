@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { ApiError } from "../shared/responses/ApiError";
-import logger from "../shared/monitoring/logger";
-import { prisma } from "../config/prisma";
+import { ApiError } from "../shared/responses/ApiError.js";
+import logger from "../shared/monitoring/logger.js";
+import { prisma } from "../config/prisma.js";
 
 export const admin = async(req: Request, res: Response, next: NextFunction) => {
     try {
@@ -13,7 +13,7 @@ export const admin = async(req: Request, res: Response, next: NextFunction) => {
         })
         if(!user) throw new ApiError(404, "User not found");
 
-        const adminEmails = process.env.ADMIN_EMAILS ?  process.env.ADMIN_EMAILS.split("m").map((e) => e.trim().toLowerCase()) : [];
+        const adminEmails = process.env.ADMIN_EMAILS ?  process.env.ADMIN_EMAILS.split(",").map((e) => e.trim().toLowerCase()) : [];
 
         if(adminEmails.includes(user.email.toLowerCase())){
             if(req.user) req.user.isAdmin = true;

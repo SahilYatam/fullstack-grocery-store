@@ -1,6 +1,6 @@
-import { Prisma } from "../../generated/prisma/client";
-import { prisma } from "../config/prisma";
-import { ApiError } from "../shared/responses/ApiError";
+import { Prisma } from "../../generated/prisma/client.js";
+import { prisma } from "../config/prisma.js";
+import { ApiError } from "../shared/responses/ApiError.js";
 
 const getDiscountDeals = async () => {
     const products = await prisma.product.findMany({
@@ -17,6 +17,27 @@ const getDiscountDeals = async () => {
                     : 0,
         }))
         .filter((p) => p.discount > 0);
+};
+
+const getAdminProducts = async () => {
+    const products = await prisma.product.findMany({
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return products.map((product) => ({
+        ...product,
+        discount:
+            product.originalPrice &&
+            product.originalPrice > product.price
+                ? Math.round(
+                      ((product.originalPrice - product.price) /
+                          product.originalPrice) *
+                          100
+                  )
+                : 0,
+    }));
 };
 
 const getProducts = async (
@@ -244,9 +265,12 @@ const updateProduct = async(id: string, data: UpdateProductInput) => {
     return product
 }
 
-const deleteProduct = async(id: string) => {
+const deleteStockProduct = async(id: string) => {
     try {
-        await prisma.product.delete({where:{id}})
+        await prisma.product.update({
+            where: {id},
+            data: {stock: Number(0)}
+        })
     } catch (error) {
         if(
             error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -260,9 +284,10 @@ const deleteProduct = async(id: string) => {
 
 export const productService = {
     getDiscountDeals,
+    getAdminProducts,
     getProducts,
     getProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteStockProduct
 };

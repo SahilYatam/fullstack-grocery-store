@@ -1,10 +1,10 @@
 import { cron, Inngest } from "inngest";
-import { prisma } from "../config/prisma";
-import sendEmail from "../config/nodemailer";
+import { prisma } from "../config/prisma.js";
+import sendEmail from "../config/nodemailer.js";
 import {
     LOW_STOCK_EMAIL,
     OFFER_EMAIL,
-} from "../shared/templates/emailTemplates";
+} from "../shared/templates/emailTemplates.js";
 
 const LOW_STOCK_THRESHOLD = 10;
 

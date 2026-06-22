@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { ApiError } from "../shared/responses/ApiError";
+import { ApiError } from "../shared/responses/ApiError.js";
 import jwt from "jsonwebtoken";
-import { prisma } from "../config/prisma";
-import logger from "../shared/monitoring/logger";
+import { prisma } from "../config/prisma.js";
+import logger from "../shared/monitoring/logger.js";
 
 export const deliveryAuth = async (
     req: Request,

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { deliveryPartnerController } from "../controllers/deliveryPartner.controller";
-import { deliveryAuth } from "../middlewares/deliveryAuth";
+import { deliveryPartnerController } from "../controllers/deliveryPartner.controller.js";
+import { deliveryAuth } from "../middlewares/deliveryAuth.js";
 
 const deliveryPartnerRouter = Router();
 

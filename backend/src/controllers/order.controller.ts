@@ -1,16 +1,17 @@
 import { Request, Response } from "express";
-import { orderService } from "../services/order.service";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
-import { ApiResponse } from "../shared/responses/ApiResponse";
+import { orderService } from "../services/order.service.js";
+import { asyncHandler } from "../shared/handlers/asyncHandler.js";
+import { ApiResponse } from "../shared/responses/ApiResponse.js";
 
 const createOrder = asyncHandler(async (req: Request, res: Response) => {
-    const { items, addressId, paymentMethod } = req.body;
+    const { items, addressId, paymentMethod, url } = req.body;
 
     const order = await orderService.createOrder(
         items,
         addressId,
         paymentMethod,
         req.user?.id as string,
+        url
     );
 
     return res
@@ -20,10 +21,10 @@ const createOrder = asyncHandler(async (req: Request, res: Response) => {
 
 const getUserOrders = asyncHandler(async(req: Request, res: Response) => {
 
-    const {status} = req.body
+    const {status} = req.params
 
     const orders = await orderService.getUserOrders(
-        status, req.user?.id as string
+        status as string, req.user?.id as string
     )
 
     return res

@@ -2,14 +2,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import express, { Express, Request, Response, NextFunction } from "express";
 import { serve } from "inngest/express";
-import { inngest, functions } from "./inngest";
-import authRouter from "./routes/auth.routes";
-import productRouter from "./routes/product.routes";
-import uploadRouter from "./routes/upload.routes";
-import orderRouter from "./routes/order.routes";
-import addressRouter from "./routes/address.routes";
-import adminRouter from "./routes/admin.routes";
-import deliveryPartnerRouter from "./routes/deliveryPartner.routes";
+import { inngest, functions } from "./inngest/index.js";
+import authRouter from "./routes/auth.routes.js";
+import productRouter from "./routes/product.routes.js";
+import uploadRouter from "./routes/upload.routes.js";
+import orderRouter from "./routes/order.routes.js";
+import addressRouter from "./routes/address.routes.js";
+import adminRouter from "./routes/admin.routes.js";
+import deliveryPartnerRouter from "./routes/deliveryPartner.routes.js";
 
 dotenv.config();
 
