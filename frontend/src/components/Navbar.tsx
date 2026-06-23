@@ -15,10 +15,10 @@ import {
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/useCart";
+import { useAuth } from "../context/authContext";
 
 const Navbar = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user: any = {name: "John Wick", email: "johnwich@exampl.com", isAdmin: true}
+  const {user, logout} = useAuth()
 
   const { cartCount, setIsCartOpen } = useCart()
 
@@ -35,6 +35,7 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
+    logout()
     setUserMenuOpen(false)
     navigate("/")
   }
