@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { MapPinIcon } from "lucide-react";
 import { iconsForLeafpad } from "../../assets/assets";
