@@ -1,8 +1,18 @@
-import { NavLink, Outlet } from "react-router-dom";
-import { PlusIcon, PackageSearchIcon, ShoppingBagIcon, LogOutIcon, BarChart3Icon, ShieldIcon, Truck } from "lucide-react";
+import { Navigate, NavLink, Outlet } from "react-router-dom";
+import {
+    PlusIcon,
+    PackageSearchIcon,
+    ShoppingBagIcon,
+    LogOutIcon,
+    BarChart3Icon,
+    ShieldIcon,
+    Truck,
+} from "lucide-react";
 import Navbar from "../../components/Navbar";
+import { useAuth } from "../../context/authContext";
 
 export default function AdminLayout() {
+    const { user } = useAuth();
 
     const AdminLinkData = [
         { to: "/admin", label: "Dashboard", icon: BarChart3Icon },
@@ -11,7 +21,11 @@ export default function AdminLayout() {
         { to: "/admin/orders", label: "Orders", icon: ShoppingBagIcon },
         { to: "/admin/delivery-partners", label: "Delivery Partners", icon: Truck },
         { to: "/", label: "Exit", icon: LogOutIcon },
-    ]
+    ];
+
+    if (!user?.isAdmin) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className="h-screen overflow-hidden">
@@ -27,16 +41,17 @@ export default function AdminLayout() {
                         </h2>
                     </div>
                     <nav className="flex flex-col gap-1.5">
-
                         {AdminLinkData.map((link) => (
                             <NavLink
                                 key={link.to}
                                 to={link.to}
                                 end={true}
-                                className={({ isActive }) => `flex items-center gap-3 p-2.5 rounded-md text-sm transition-colors ${isActive
-                                    ? "bg-app-green text-white"
-                                    : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"
-                                    }`}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 p-2.5 rounded-md text-sm transition-colors ${isActive
+                                        ? "bg-app-green text-white"
+                                        : "text-app-text-light hover:bg-orange-50 hover:text-zinc-900"
+                                    }`
+                                }
                             >
                                 <link.icon className="size-4" /> {link.label}
                             </NavLink>
