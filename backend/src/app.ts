@@ -10,12 +10,19 @@ import orderRouter from "./routes/order.routes.js";
 import addressRouter from "./routes/address.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import deliveryPartnerRouter from "./routes/deliveryPartner.routes.js";
+import { stripeWebhook } from "./controllers/webhook.js";
 
 dotenv.config();
 
 let app: Express | null = null;
 
 app = express();
+
+app.post(
+    "/api/stripe",
+    express.raw({ type: "application/json" }),
+    stripeWebhook,
+);
 
 app.use(cors());
 app.use(express.json());
