@@ -17,7 +17,6 @@ const CartSidebar = () => {
     updateQuantity,
     removeFromCart,
     cartTotal,
-    cartCount,
     isCartOpen,
     setIsCartOpen,
   } = useCart();
