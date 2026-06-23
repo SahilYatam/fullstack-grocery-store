@@ -7,7 +7,7 @@ const orderRouter = Router();
 
 orderRouter.post("/", auth, orderController.createOrder);
 
-orderRouter.get("/:status", auth, orderController.getUserOrders);
+orderRouter.get("/", auth, orderController.getUserOrders);
 
 orderRouter.get("/all", auth, admin, orderController.getAllOrders);
 

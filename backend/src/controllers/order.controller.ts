@@ -21,7 +21,7 @@ const createOrder = asyncHandler(async (req: Request, res: Response) => {
 
 const getUserOrders = asyncHandler(async(req: Request, res: Response) => {
 
-    const {status} = req.params
+    const {status} = req.query
 
     const orders = await orderService.getUserOrders(
         status as string, req.user?.id as string
