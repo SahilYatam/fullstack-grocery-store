@@ -11,6 +11,7 @@ import addressRouter from "./routes/address.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import deliveryPartnerRouter from "./routes/deliveryPartner.routes.js";
 import { stripeWebhook } from "./controllers/webhook.js";
+import { transporter } from "./config/nodemailer.js";
 
 dotenv.config();
 
@@ -26,6 +27,16 @@ app.post(
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/smtp-test", async (_, res) => {
+    try {
+        await transporter.verify();
+        res.send("SMTP OK");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("SMTP Failed");
+    }
+});
 
 app.get("/health", (req, res) => {
     res.send({ Status: "OK" });
