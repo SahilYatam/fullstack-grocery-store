@@ -61,9 +61,11 @@ const Checkout = () => {
                 })),
                 addressId: address.id,
                 paymentMethod,
+                url: window.location.origin
             };
 
             const data = await api.post("/orders", orderData);
+            console.log("createOrder:", data.data.data.url)
 
             if (data.data.data.url) {
                 window.location.href = data.data.data.url;
